@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TheAyyQuotes PWA</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0c29">
+<style>
+:root{
+  --bg:#0f0c29;
+  --card:rgba(255,255,255,.08);
+  --text:#fff;
+  --accent:#ff7a18;
+}
+/* THEMES */
+.light{--bg:#f2f2f2;--card:#fff;--text:#111;--accent:#ff7a18;}
+.ocean{--bg:#0a2540;--card:rgba(255,255,255,.1);--text:#e6f2ff;--accent:#4dd2ff;}
+.sakura{--bg:#2b0f1f;--card:rgba(255,255,255,.1);--text:#ffe6f2;--accent:#ff7eb3;}
+.forest{--bg:#0f2b1d;--card:rgba(255,255,255,.1);--text:#eaffea;--accent:#5cff8d;}
+
+*{box-sizing:border-box;font-family:system-ui,Inter,sans-serif;}
+body{margin:0;height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text);transition:.4s;}
+.card{width:min(420px,92%);padding:30px;border-radius:22px;background:var(--card);backdrop-filter:blur(16px);box-shadow:0 30px 70px rgba(0,0,0,.45);text-align:center;position:relative;}
+.hamburger{position:absolute;top:15px;right:18px;font-size:22px;cursor:pointer;}
+#title{margin-bottom:20px;font-weight:800;color:var(--accent);text-shadow:0 0 12px rgba(255,255,255,.6);}
+.quote{font-size:20px;line-height:1.6;opacity:0;transform:translateY(20px);transition:.45s;}
+.author{margin-top:10px;font-size:14px;opacity:.7;}
+.counter{margin-top:6px;font-size:12px;opacity:.45;}
+.show{opacity:1;transform:translateY(0);}
+button{margin-top:15px;padding:13px 24px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--accent),#ffd56b);color:#111;font-weight:800;cursor:pointer;transition:.2s;}
+button:hover{transform:scale(1.05);}
+button:active{transform:scale(.96);}
+
+/* MENU */
+.menu{position:fixed;top:0;right:-100%;width:320px;height:100%;background:var(--card);backdrop-filter:blur(18px);box-shadow:-15px 0 40px rgba(0,0,0,.5);padding:25px;transition:.4s;overflow-y:auto;z-index:100;}
+.menu.open{right:0;}
+.menu h3{margin-top:0;}
+.menu-section{margin:20px 0;}
+.menu-item{margin:10px 0;cursor:pointer;opacity:.85;}
+.menu-item:hover{opacity:1;}
+.menu a{color:var(--accent);text-decoration:none;display:block;margin:6px 0;font-size:14px;}
+.theme-btn{padding:6px 12px;margin:4px;border-radius:10px;background:var(--accent);color:#111;font-size:12px;cursor:pointer;}
+.close{position:absolute;top:15px;right:18px;font-size:20px;cursor:pointer;}
+.fav-item{cursor:pointer;margin:4px 0;padding:2px 4px;border-radius:6px;background:rgba(255,255,255,.05);}
+.fav-item:hover{background:rgba(255,255,255,.15);}
+.leaderboard div{margin:4px 0;font-size:13px;opacity:.8;}
+
+/* FAVORITES MODAL */
+#favModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;}
+#favModalContent{background:var(--card);padding:20px;border-radius:18px;width:min(90%,400px);max-height:80%;overflow-y:auto;position:relative;}
+#favModalContent h4{margin-top:0;margin-bottom:10px;}
+#favModalContent .fav-item{padding:6px 8px;margin:4px 0;background:rgba(255,255,255,.08);}
+#favModalContent .closeModal{position:absolute;top:10px;right:15px;font-size:18px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <h1 id="title">TheAyyQuotes</h1>
+  <div class="quote" id="quote"></div>
+  <div class="author" id="author"></div>
+  <div class="counter" id="counter"></div>
+  <button onclick="newQuote()">New Quote</button>
+  <button onclick="addFavorite()">⭐ Favorite</button>
+  <button onclick="shareQuote()">📤 Share</button>
+</div>
+
+<div class="menu" id="menu">
+  <div class="close" onclick="toggleMenu()">✕</div>
+
+  <h3>Menu</h3>
+
+  <div class="menu-section">
+    🎨 Themes
+    <div>
+      <span class="theme-btn" onclick="setTheme('')">Dark</span>
+      <span class="theme-btn" onclick="setTheme('light')">Light</span>
+      <span class="theme-btn" onclick="setTheme('ocean')">Ocean</span>
+      <span class="theme-btn" onclick="setTheme('sakura')">Sakura</span>
+      <span class="theme-btn" onclick="setTheme('forest')">Forest</span>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    ⭐ Favorites
+    <div id="favContainer" style="font-size:13px;opacity:.7"></div>
+    <button onclick="showAllFavorites()" style="margin-top:6px;padding:6px 12px;border-radius:10px;background:var(--accent);color:#111;font-size:12px;cursor:pointer;">See All</button>
+  </div>
+
+  <div class="menu-section">
+    📊 Stats
+    <div style="font-size:13px;opacity:.7">
+      Quotes seen: <span id="menuCount">0</span>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    🏆 Leaderboard (Top 3)
+    <div class="leaderboard" id="leaderboard"></div>
+  </div>
+
+  <div class="menu-section">
+    🔗 Links
+    <a href="https://youtube.com/@louisayy" target="_blank">Louis YouTube</a>
+    <a href="https://discord.gg/theayyteam" target="_blank">TheAyyTeam</a>
+    <a href="https://instagram.com/itslouisayy" target="_blank">Instagram</a>
+  </div>
+
+  <div class="menu-section">
+    🧑‍💻 Credits
+    <div style="font-size:13px;opacity:.7">
+      Built by @vedreversed (fulvo)<br>
+      For the Ayy Team 💙<br>
+      Quotes by their authors
+    </div>
+  </div>
+
+  <div class="menu-section">
+    🧹 Reset
+    <div class="menu-item" onclick="resetData()">Reset stats & theme</div>
+  </div>
+
+  <div class="menu-section">
+    ℹ️ About
+    <div style="font-size:13px;opacity:.7">
+      Installable offline app, smooth animations, favorites, shareable quotes, multiple themes, leaderboard.
+    </div>
+  </div>
+</div>
+
+<!-- FAVORITES MODAL -->
+<div id="favModal">
+  <div id="favModalContent">
+    <div class="closeModal" onclick="closeFavModal()">✕</div>
+    <h4>All Favorites</h4>
+    <div id="favList"></div>
+  </div>
+</div>
+
+<script>
+const quotes=[
+{text:"Stay hungry, stay foolish.",author:"Steve Jobs"},
+{text:"Discipline beats motivation.",author:"Unknown"},
+{text:"Dream big. Start small. Act now.",author:"Robin Sharma"},
+{text:"Code is like humor. If you explain it, it’s bad.",author:"Cory House"},
+{text:"Focus on progress, not perfection.",author:"Unknown"}
+];
+
+const q=document.getElementById("quote");
+const a=document.getElementById("author");
+const counter=document.getElementById("counter");
+const menuCount=document.getElementById("menuCount");
+const menu=document.getElementById("menu");
+const favContainer=document.getElementById("favContainer");
+const favModal=document.getElementById("favModal");
+const favList=document.getElementById("favList");
+const leaderboardDiv=document.getElementById("leaderboard");
+
+let last=-1;
+let seen=Number(localStorage.getItem("seen")||0);
+let favorites=JSON.parse(localStorage.getItem("favorites")||"[]");
+let leaderboard=JSON.parse(localStorage.getItem("leaderboard")||"[]");
+
+// FAVORITES
+function renderFavs(){
+  favContainer.innerHTML = '';
+  if(favorites.length===0){
+    favContainer.textContent="No favorites yet.";
+  } else {
+    favorites.forEach((f,i)=>{
+      const div = document.createElement('div');
+      div.textContent=f;
+      div.className="fav-item";
+      div.onclick=()=>loadFavorite(i);
+      favContainer.appendChild(div);
+    });
+  }
+}
+
+function showAllFavorites(){
+  favList.innerHTML = '';
+  if(favorites.length===0){
+    favList.textContent="No favorites yet.";
+  } else {
+    favorites.forEach((f,i)=>{
+      const div = document.createElement('div');
+      div.textContent=f;
+      div.className="fav-item";
+      div.onclick=()=>{
+        loadFavorite(i);
+        closeFavModal();
+      };
+      favList.appendChild(div);
+    });
+  }
+  favModal.style.display='flex';
+}
+
+function closeFavModal(){favModal.style.display='none';}
+
+// QUOTES
+function newQuote(){
+  let i;
+  do{i=Math.floor(Math.random()*quotes.length)}while(i===last);
+  last=i;
+  seen++;
+  localStorage.setItem("seen",seen);
+  updateLeaderboard();
+
+  q.classList.remove("show");
+  a.classList.remove("show");
+
+  setTimeout(()=>{
+    q.textContent=`"${quotes[i].text}"`;
+    a.textContent=`— ${quotes[i].author}`;
+    counter.textContent=`quotes seen: ${seen}`;
+    menuCount.textContent=seen;
+    q.classList.add("show");
+    a.classList.add("show");
+  },200);
+}
+
+// FAVORITE BUTTON
+function addFavorite(){
+  const current=`"${q.textContent}" ${a.textContent}`;
+  if(!favorites.includes(current)){
+    favorites.push(current);
+    localStorage.setItem("favorites",JSON.stringify(favorites));
+    renderFavs();
+  }
+}
+
+// LOAD FAVORITE
+function loadFavorite(i){
+  const fav = favorites[i];
+  if(!fav) return;
+  const parts = fav.match(/"(.*)" — (.*)/);
+  if(parts){
+    q.textContent = `"${parts[1]}"`;
+    a.textContent = `— ${parts[2]}`;
+    q.classList.add("show");
+    a.classList.add("show");
+  }
+}
+
+// SHARE BUTTON
+function shareQuote(){
+  const text = `${q.textContent} ${a.textContent}`;
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    alert("Quote copied to clipboard! Paste it in Discord.");
+  });
+  window.open(waUrl,"_blank");
+}
+
+// THEME
+function toggleMenu(){menu.classList.toggle("open");}
+function setTheme(t){document.body.className=t;localStorage.setItem("theme",t);}
+function resetData(){localStorage.clear();location.reload();}
+
+// LEADERBOARD
+function renderLeaderboard(){
+  leaderboardDiv.innerHTML='';
+  leaderboard.sort((a,b)=>b-a);
+  for(let i=0;i<3;i++){
+    leaderboardDiv.innerHTML += `<div>#${i+1}: ${leaderboard[i]||0}</div>`;
+  }
+}
+
+function updateLeaderboard(){
+  leaderboard.push(seen);
+  leaderboard.sort((a,b)=>b-a);
+  if(leaderboard.length>3) leaderboard = leaderboard.slice(0,3);
+  localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+  renderLeaderboard();
+}
+
+// INIT
+setTheme(localStorage.getItem("theme")||"");
+menuCount.textContent=seen;
+renderFavs();
+renderLeaderboard();
+newQuote();
+
+// UX
+document.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();newQuote()}});
+document.addEventListener("click",e=>{if(menu.classList.contains("open")&&!menu.contains(e.target)&&!e.target.classList.contains("hamburger"))menu.classList.remove("open");});
+
+// SERVICE WORKER
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered'));
+}
+</script>
+
+</body>
+</html>
