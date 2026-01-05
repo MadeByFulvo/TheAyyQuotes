@@ -2,22 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TheAyyQuotes - quotes LMAO</title>
+<title>TheAyyQuotes PWA</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0c29">
 <style>
-:root{
-  --bg:#0f0c29;
-  --card:rgba(255,255,255,.08);
-  --text:#fff;
-  --accent:#ff7a18;
-}
-/* THEMES */
+:root{--bg:#0f0c29;--card:rgba(255,255,255,.08);--text:#fff;--accent:#ff7a18;}
 .light{--bg:#f2f2f2;--card:#fff;--text:#111;--accent:#ff7a18;}
 .ocean{--bg:#0a2540;--card:rgba(255,255,255,.1);--text:#e6f2ff;--accent:#4dd2ff;}
 .sakura{--bg:#2b0f1f;--card:rgba(255,255,255,.1);--text:#ffe6f2;--accent:#ff7eb3;}
 .forest{--bg:#0f2b1d;--card:rgba(255,255,255,.1);--text:#eaffea;--accent:#5cff8d;}
-
 *{box-sizing:border-box;font-family:system-ui,Inter,sans-serif;}
 body{margin:0;height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text);transition:.4s;}
 .card{width:min(420px,92%);padding:30px;border-radius:22px;background:var(--card);backdrop-filter:blur(16px);box-shadow:0 30px 70px rgba(0,0,0,.45);text-align:center;position:relative;}
@@ -30,22 +23,18 @@ body{margin:0;height:100vh;background:var(--bg);display:flex;align-items:center;
 button{margin-top:15px;padding:13px 24px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--accent),#ffd56b);color:#111;font-weight:800;cursor:pointer;transition:.2s;}
 button:hover{transform:scale(1.05);}
 button:active{transform:scale(.96);}
-
-/* MENU */
 .menu{position:fixed;top:0;right:-100%;width:320px;height:100%;background:var(--card);backdrop-filter:blur(18px);box-shadow:-15px 0 40px rgba(0,0,0,.5);padding:25px;transition:.4s;overflow-y:auto;z-index:100;}
 .menu.open{right:0;}
 .menu h3{margin-top:0;}
 .menu-section{margin:20px 0;}
 .menu-item{margin:10px 0;cursor:pointer;opacity:.85;}
-.menu-item:hover{opacity:1;}
+.menu-item:hover{opacity:1}
 .menu a{color:var(--accent);text-decoration:none;display:block;margin:6px 0;font-size:14px;}
 .theme-btn{padding:6px 12px;margin:4px;border-radius:10px;background:var(--accent);color:#111;font-size:12px;cursor:pointer;}
 .close{position:absolute;top:15px;right:18px;font-size:20px;cursor:pointer;}
 .fav-item{cursor:pointer;margin:4px 0;padding:2px 4px;border-radius:6px;background:rgba(255,255,255,.05);}
 .fav-item:hover{background:rgba(255,255,255,.15);}
 .leaderboard div{margin:4px 0;font-size:13px;opacity:.8;}
-
-/* FAVORITES MODAL */
 #favModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;}
 #favModalContent{background:var(--card);padding:20px;border-radius:18px;width:min(90%,400px);max-height:80%;overflow-y:auto;position:relative;}
 #favModalContent h4{margin-top:0;margin-bottom:10px;}
@@ -68,9 +57,7 @@ button:active{transform:scale(.96);}
 
 <div class="menu" id="menu">
   <div class="close" onclick="toggleMenu()">✕</div>
-
   <h3>Menu</h3>
-
   <div class="menu-section">
     🎨 Themes
     <div>
@@ -81,50 +68,43 @@ button:active{transform:scale(.96);}
       <span class="theme-btn" onclick="setTheme('forest')">Forest</span>
     </div>
   </div>
-
   <div class="menu-section">
     ⭐ Favorites
     <div id="favContainer" style="font-size:13px;opacity:.7"></div>
     <button onclick="showAllFavorites()" style="margin-top:6px;padding:6px 12px;border-radius:10px;background:var(--accent);color:#111;font-size:12px;cursor:pointer;">See All</button>
   </div>
-
   <div class="menu-section">
     📊 Stats
     <div style="font-size:13px;opacity:.7">
       Quotes seen: <span id="menuCount">0</span>
     </div>
   </div>
-
   <div class="menu-section">
-    your top 3 scores for quotes seen
+    🏆 Leaderboard
     <div class="leaderboard" id="leaderboard"></div>
   </div>
-
   <div class="menu-section">
     🔗 Links
     <a href="https://youtube.com/@louisayy" target="_blank">Louis YouTube</a>
     <a href="https://discord.gg/theayyteam" target="_blank">TheAyyTeam</a>
     <a href="https://instagram.com/itslouisayy" target="_blank">Instagram</a>
   </div>
-
   <div class="menu-section">
     🧑‍💻 Credits
     <div style="font-size:13px;opacity:.7">
       Built by @vedreversed (fulvo)<br>
       For the Ayy Team 💙<br>
-      Quotes by their authors in the ayy team
+      Quotes by their authors
     </div>
   </div>
-
   <div class="menu-section">
     🧹 Reset
     <div class="menu-item" onclick="resetData()">Reset stats & theme</div>
   </div>
-
   <div class="menu-section">
     ℹ️ About
     <div style="font-size:13px;opacity:.7">
-     an app for the ayy team. pls dont copy
+     An app for the Ayy Team. Works offline, installable, favorites, leaderboard.
     </div>
   </div>
 </div>
@@ -149,7 +129,6 @@ const quotes=[
 {text:"You can't ever shame me i'm just to rad",author:"Michael"},
 {text:"Thank you for ass",author:"Ruqayya"},
 {text:"Shove that welcome up your arse",author:"Ruqayya"},
-{text:"Shove that welcome up your arse",author:"Ruqayya"},
 {text:"U can see me pee?",author:"Ruqayya"},
 {text:"i'm going to kidnap Shield.",author:"Sam (Shield's bodyguard"},
 {text:"you never hall of shamed me, you liar",author:"woodsy"},
@@ -172,10 +151,7 @@ const quotes=[
 {text:"good boy (edited)",author:"dollette"},
 {text:"i love stalking children",author:"mearcedes beanz"},
 {text:"DADDY KITTEN GOTCHA",author:"dollette"},
-{text:"DADDY KITTEN GOTCHA",author:"dollette"},
-{text:"NO BC SERIOUSPLY I WAS IN SHOCK I WAS LIKE. "HOLY FUCK?!?! WERE GETTING VOX BACKSTORY SHRUFHF JHHHHGJFHDGDHR HOLY FUCK HES HOT ?! AHFJGJHNVN OMG OMG OMG HES EXACTLY HOW IMAGINED HIM AAAADFGGDGDHDGFHDGF OMG OMG HES SO CUTE WHAT ADGHJJJJJ, OH SHI BRO DIED LIKE THAT..:SOB: eSPECIALLY when me and my friend were talking about how he would look as a human, a day before the episode came out :sob:  DEADASS was giggling and kicking my feet like a unhinged fan girl. -- idt i got that right but hey at least i tried - fulvo --" ,author:"Tessa (vel)"},
-];
-   
+{text:"NO BC SERIOUSPLY I WAS IN SHOCK I WAS LIKE. HOLY FUCK?!?! WERE GETTING VOX BACKSTORY SHRUFHF JHHHHGJFHDGDHR HOLY FUCK HES HOT ?! AHFJGJHNVN OMG OMG OMG HES EXACTLY HOW IMAGINED HIM AAAADFGGDGDHDGFHDGF OMG OMG HES SO CUTE WHAT ADGHJJJJJ, OH SHI BRO DIED LIKE THAT..:SOB: eSPECIALLY when me and my friend were talking about how he would look as a human, a day before the episode came out :sob: DEADASS was giggling and kicking my feet like a unhinged fan girl. -- idt i got that right but hey at least i tried - fulvo --",author:"Tessa (vel)"}];
 
 const q=document.getElementById("quote");
 const a=document.getElementById("author");
@@ -192,14 +168,12 @@ let seen=Number(localStorage.getItem("seen")||0);
 let favorites=JSON.parse(localStorage.getItem("favorites")||"[]");
 let leaderboard=JSON.parse(localStorage.getItem("leaderboard")||"[]");
 
-// FAVORITES
 function renderFavs(){
-  favContainer.innerHTML = '';
-  if(favorites.length===0){
-    favContainer.textContent="No favorites yet.";
-  } else {
+  favContainer.innerHTML='';
+  if(favorites.length===0){favContainer.textContent="No favorites yet.";}
+  else{
     favorites.forEach((f,i)=>{
-      const div = document.createElement('div');
+      const div=document.createElement('div');
       div.textContent=f;
       div.className="fav-item";
       div.onclick=()=>loadFavorite(i);
@@ -209,18 +183,14 @@ function renderFavs(){
 }
 
 function showAllFavorites(){
-  favList.innerHTML = '';
-  if(favorites.length===0){
-    favList.textContent="No favorites yet.";
-  } else {
+  favList.innerHTML='';
+  if(favorites.length===0){favList.textContent="No favorites yet.";}
+  else{
     favorites.forEach((f,i)=>{
-      const div = document.createElement('div');
+      const div=document.createElement('div');
       div.textContent=f;
       div.className="fav-item";
-      div.onclick=()=>{
-        loadFavorite(i);
-        closeFavModal();
-      };
+      div.onclick=()=>{loadFavorite(i);closeFavModal();};
       favList.appendChild(div);
     });
   }
@@ -229,10 +199,9 @@ function showAllFavorites(){
 
 function closeFavModal(){favModal.style.display='none';}
 
-// QUOTES
 function newQuote(){
   let i;
-  do{i=Math.floor(Math.random()*quotes.length)}while(i===last);
+  do{i=Math.floor(Math.random()*quotes.length);}while(i===last && quotes.length>1);
   last=i;
   seen++;
   localStorage.setItem("seen",seen);
@@ -251,9 +220,8 @@ function newQuote(){
   },200);
 }
 
-// FAVORITE BUTTON
 function addFavorite(){
-  const current=`"${q.textContent}" ${a.textContent}`;
+  const current=`${q.textContent} ${a.textContent}`;
   if(!favorites.includes(current)){
     favorites.push(current);
     localStorage.setItem("favorites",JSON.stringify(favorites));
@@ -261,47 +229,39 @@ function addFavorite(){
   }
 }
 
-// LOAD FAVORITE
 function loadFavorite(i){
-  const fav = favorites[i];
+  const fav=favorites[i];
   if(!fav) return;
-  const parts = fav.match(/"(.*)" — (.*)/);
+  const parts=fav.match(/"(.*)" — (.*)/);
   if(parts){
-    q.textContent = `"${parts[1]}"`;
-    a.textContent = `— ${parts[2]}`;
+    q.textContent=`"${parts[1]}"`;
+    a.textContent=`— ${parts[2]}`;
     q.classList.add("show");
     a.classList.add("show");
   }
 }
 
-// SHARE BUTTON
 function shareQuote(){
-  const text = `${q.textContent} ${a.textContent}`;
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-  navigator.clipboard.writeText(text).then(()=>{
-    alert("Quote copied to clipboard! Paste it in Discord.");
-  });
+  const text=`${q.textContent} ${a.textContent}`;
+  navigator.clipboard.writeText(text).then(()=>alert("Quote copied! Paste in Discord/WhatsApp."));
+  const waUrl=`https://wa.me/?text=${encodeURIComponent(text)}`;
   window.open(waUrl,"_blank");
 }
 
-// THEME
 function toggleMenu(){menu.classList.toggle("open");}
 function setTheme(t){document.body.className=t;localStorage.setItem("theme",t);}
 function resetData(){localStorage.clear();location.reload();}
 
-// LEADERBOARD
 function renderLeaderboard(){
   leaderboardDiv.innerHTML='';
   leaderboard.sort((a,b)=>b-a);
-  for(let i=0;i<3;i++){
-    leaderboardDiv.innerHTML += `<div>#${i+1}: ${leaderboard[i]||0}</div>`;
-  }
+  for(let i=0;i<3;i++){leaderboardDiv.innerHTML += `<div>#${i+1}: ${leaderboard[i]||0}</div>`;}
 }
 
 function updateLeaderboard(){
   leaderboard.push(seen);
   leaderboard.sort((a,b)=>b-a);
-  if(leaderboard.length>3) leaderboard = leaderboard.slice(0,3);
+  if(leaderboard.length>3) leaderboard=leaderboard.slice(0,3);
   localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
   renderLeaderboard();
 }
@@ -313,25 +273,13 @@ renderFavs();
 renderLeaderboard();
 newQuote();
 
-// UX
-document.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();newQuote()}});
+document.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();newQuote();}});
 document.addEventListener("click",e=>{if(menu.classList.contains("open")&&!menu.contains(e.target)&&!e.target.classList.contains("hamburger"))menu.classList.remove("open");});
 
-// SERVICE WORKER
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered'));
+  navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered')).catch(err=>console.error(err));
 }
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log('Service Worker registered'))
-    .catch(err => console.error('SW registration failed:', err));
-}
-
 </script>
-
 </body>
 </html>
-
-
-
 
