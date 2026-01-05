@@ -8,3 +8,4 @@ contributors:
 
 if you have any questions, dm me in discord!
 if you want to add a quote, dm me!
+for errors in the pages or in the quotes/author texts, please dm me or contact MadeByFulvo@outlook.com
